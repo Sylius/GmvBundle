@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ This file is part of the Sylius package.
+
+ (c) Sylius Sp. z o.o.
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <services>
+        <service id="Sylius\GmvBundle\Parser\DateParser" />
+        <service id="Sylius\GmvBundle\Parser\DateParserInterface" alias="Sylius\GmvBundle\Parser\DateParser" />
+
+        <service id="Sylius\GmvBundle\Validator\InputParametersValidator">
+            <argument type="service" id="Sylius\GmvBundle\Parser\DateParser" />
+        </service>
+        <service id="Sylius\GmvBundle\Validator\InputParametersValidatorInterface" alias="Sylius\GmvBundle\Validator\InputParametersValidator" />
+
+        <service id="Sylius\GmvBundle\Provider\GmvProvider">
+            <argument type="service" id="sylius.repository.order" />
+            <argument type="service" id="sylius.context.channel" />
+            <argument type="service" id="sylius.money_formatter" />
+        </service>
+        <service id="Sylius\GmvBundle\Provider\GmvProviderInterface" alias="Sylius\GmvBundle\Provider\GmvProvider" />
+
+        <service id="Sylius\GmvBundle\Command\GmvCommand">
+            <argument type="service" id="Sylius\GmvBundle\Validator\InputParametersValidator" />
+            <argument type="service" id="Sylius\GmvBundle\Parser\DateParser" />
+            <argument type="service" id="Sylius\GmvBundle\Provider\GmvProvider" />
+            <tag name="console.command" command="sylius:gmv:calculate" />
+        </service>
+    </services>
+
+</container>
