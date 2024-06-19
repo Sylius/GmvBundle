@@ -16,11 +16,16 @@ namespace Sylius\GmvBundle\Command;
 use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Sylius\GmvBundle\Validator\InputParametersValidatorInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'sylius:gmv:calculate',
+    description: 'Lightweight local command to calculate the Sylius instance GMV within a specific period'
+)]
 final class GmvCommand extends Command
 {
     public function __construct(
@@ -34,8 +39,6 @@ final class GmvCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('sylius:gmv:calculate')
-            ->setDescription('Lightweight local command to calculate the Sylius instance GMV within a specific period')
             ->addArgument(
                 'periodStart',
                 InputArgument::OPTIONAL, '
