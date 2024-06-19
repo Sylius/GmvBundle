@@ -14,29 +14,60 @@ declare(strict_types=1);
 namespace Sylius\GmvBundle\Provider;
 
 use Sylius\Bundle\MoneyBundle\Formatter\MoneyFormatterInterface;
-use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
+use Webmozart\Assert\Assert;
 
 final class GmvProvider implements GmvProviderInterface
 {
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly ChannelContextInterface $channelContext,
         private readonly MoneyFormatterInterface $moneyFormatter
     ) {
     }
 
-    public function getGmvForPeriod(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): string
+    /** @return array<string, string> */
+    public function getGmvForPeriod(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): array
     {
-        $total = $this->calculateGmvForPeriod($periodStart, $periodEnd);
-        $currencyCode = $this->channelContext->getChannel()->getBaseCurrency()->getCode();
+        $gmv = [];
+        $currencyCodes = $this->findCurrenciesInOrders($periodStart, $periodEnd);
 
-        return $this->moneyFormatter->format($total, $currencyCode);
+
+        foreach ($currencyCodes as $currencyCode) {
+            $total = $this->calculateGmvForPeriodAndCurrency($periodStart, $periodEnd, $currencyCode);
+
+            $gmv[$currencyCode] = $this->moneyFormatter->format($total, $currencyCode);
+        }
+
+        return $gmv;
     }
 
-    private function calculateGmvForPeriod(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): int
+    /** @return array<string> */
+    private function findCurrenciesInOrders(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): array
+    {
+        $queryBuilder = $this->orderRepository->createListQueryBuilder();
+
+        $currencies = $queryBuilder
+            ->select('o.currencyCode')
+            ->andWhere('o.checkoutCompletedAt >= :periodStart')
+            ->andWhere('o.checkoutCompletedAt <= :periodEnd')
+            ->andWhere('o.checkoutState = :completedState')
+            ->andWhere('o.paymentState != :cancelledState')
+            ->setParameter('periodStart', $periodStart)
+            ->setParameter('periodEnd', $periodEnd)
+            ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
+            ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
+            ->groupBy('o.currencyCode')
+            ->getQuery()
+            ->getScalarResult();
+
+        Assert::isArray($currencies);
+
+        return array_map(fn(array $currency) => $currency['currencyCode'], $currencies);
+    }
+
+    private function calculateGmvForPeriodAndCurrency(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, string $currencyCode): int
     {
         $queryBuilder = $this->orderRepository->createListQueryBuilder();
 
@@ -46,10 +77,12 @@ final class GmvProvider implements GmvProviderInterface
             ->andWhere('o.checkoutCompletedAt <= :periodEnd')
             ->andWhere('o.checkoutState = :completedState')
             ->andWhere('o.paymentState != :cancelledState')
+            ->andWhere('o.currencyCode = :currencyCode')
             ->setParameter('periodStart', $periodStart)
             ->setParameter('periodEnd', $periodEnd)
             ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
             ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
+            ->setParameter('currencyCode', $currencyCode)
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -62,13 +95,18 @@ final class GmvProvider implements GmvProviderInterface
             ->andWhere('o.checkoutCompletedAt <= :periodEnd')
             ->andWhere('o.checkoutState = :completedState')
             ->andWhere('o.paymentState != :cancelledState')
+            ->andWhere('o.currencyCode = :currencyCode')
             ->setParameter('periodStart', $periodStart)
             ->setParameter('periodEnd', $periodEnd)
             ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
             ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
             ->setParameter('taxType', 'tax')
+            ->setParameter('currencyCode', $currencyCode)
             ->getQuery()
             ->getSingleScalarResult();
+
+        Assert::integer($totalItemsQuery);
+        Assert::integer($totalTaxQuery);
 
         $totalItems = intval($totalItemsQuery);
         $totalTaxes = intval($totalTaxQuery);

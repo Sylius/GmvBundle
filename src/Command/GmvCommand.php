@@ -66,12 +66,14 @@ final class GmvCommand extends Command
         $startDate = $this->dateParser->parseStartOfMonth($periodStart);
         $endDate = $this->dateParser->parseEndOfMonth($periodEnd);
 
-        $gmv = $this->gmvProvider->getGmvForPeriod($startDate, $endDate);
+        $gmvs = $this->gmvProvider->getGmvForPeriod($startDate, $endDate);
 
         $output->writeln('<info>GMV Calculation</info>');
         $output->writeln(sprintf('<comment>Period Start:</comment> %s', $startDate->format('Y-m-d')));
         $output->writeln(sprintf('<comment>Period End:</comment> %s', $endDate->format('Y-m-d')));
-        $output->writeln(sprintf('<comment>GMV:</comment> %s', $gmv));
+        foreach ($gmvs as $key => $gmv) {
+            $output->writeln(sprintf('<comment>GMV in %s:</comment> %s', $key, $gmv));
+        }
 
         return Command::SUCCESS;
     }

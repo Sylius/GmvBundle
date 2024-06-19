@@ -64,7 +64,7 @@ class GmvCommandTest extends TestCase
 
         $this->gmvProvider
             ->method('getGmvForPeriod')
-            ->willReturn('$1000.00');
+            ->willReturn(['USD' => '$1000.00']);
 
         $this->commandTester->execute([]);
 
@@ -74,7 +74,7 @@ class GmvCommandTest extends TestCase
         $this->assertStringContainsString('GMV Calculation', $output);
         $this->assertStringContainsString('Period Start:', $output);
         $this->assertStringContainsString('Period End:', $output);
-        $this->assertStringContainsString('GMV: $1000.00', $output);
+        $this->assertStringContainsString('GMV in USD: $1000.00', $output);
     }
 
     public function testExecuteWithCustomValues(): void
@@ -102,7 +102,7 @@ class GmvCommandTest extends TestCase
         $this->gmvProvider
             ->method('getGmvForPeriod')
             ->with($startDate, $endDate)
-            ->willReturn('$2000.00');
+            ->willReturn(['USD' => '$2000.00']);
 
         $this->commandTester->execute([
             'periodStart' => $periodStart,
@@ -115,7 +115,7 @@ class GmvCommandTest extends TestCase
         $this->assertStringContainsString('GMV Calculation', $output);
         $this->assertStringContainsString('Period Start:', $output);
         $this->assertStringContainsString('Period End:', $output);
-        $this->assertStringContainsString('GMV: $2000.00', $output);
+        $this->assertStringContainsString('GMV in USD: $2000.00', $output);
     }
 
     public function testExecuteWithInvalidFormatDates(): void
