@@ -27,7 +27,8 @@
         "webmozart/assert": "^1.9",
         "lchrusciel/api-test-case": "^5.0",
         "sylius-labs/coding-standard": "^4.0",
-        "phpstan/phpstan": "^1.11"
+        "phpstan/phpstan": "^1.11",
+        "phpstan/phpstan-doctrine": "^1.4"
     },
     "extra": {
         "symfony": {

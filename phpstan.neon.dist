@@ -1,6 +1,12 @@
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
 parameters:
     level: 8
+    reportUnmatchedIgnoredErrors: false
     paths:
         - 'src/'
-
-
+    excludePaths:
+        - 'src/DependencyInjection/'
+    ignoreErrors:
+            - '#PHPDoc tag @param for parameter \$orderRepository contains generic type Sylius\\Component\\Core\\Repository\\OrderRepositoryInterface<Sylius\\Component\\Core\\Model\\OrderInterface> but interface Sylius\\Component\\Core\\Repository\\OrderRepositoryInterface is not generic#'
