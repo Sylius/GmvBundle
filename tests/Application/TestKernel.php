@@ -68,7 +68,7 @@ final class TestKernel extends Kernel
 {
     public function registerBundles(): array
     {
-        return [
+        $bundles = [
             new FrameworkBundle(),
             new SecurityBundle(),
             new TwigBundle(),
@@ -108,7 +108,6 @@ final class TestKernel extends Kernel
             new BabDevPagerfantaBundle(),
             new WebpackEncoreBundle(),
             new winzouStateMachineBundle(),
-            new SyliusStateMachineAbstractionBundle(),
             new DoctrineMigrationsBundle(),
             new SonataBlockBundle(),
             new SyliusLabsDoctrineMigrationsExtraBundle(),
@@ -118,6 +117,12 @@ final class TestKernel extends Kernel
             new NelmioAliceBundle(),
             new FidryAliceDataFixturesBundle(),
         ];
+
+        if (SyliusCoreBundle::VERSION_ID >= '11300') {
+            $bundles[] = new SyliusStateMachineAbstractionBundle();
+        }
+
+        return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

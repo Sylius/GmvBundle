@@ -2,6 +2,9 @@ imports:
   - { resource: '@SyliusCoreBundle/Resources/config/app/config.yml' }
   - { resource: '@SyliusGmvBundle/config/services.xml' }
 
+parameters:
+  locale: en_US
+
 security:
   firewalls:
     main:
