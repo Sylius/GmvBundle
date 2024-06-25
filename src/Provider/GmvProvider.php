@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sylius\GmvBundle\Provider;
 
 use Sylius\Bundle\MoneyBundle\Formatter\MoneyFormatterInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
@@ -21,6 +23,7 @@ use Webmozart\Assert\Assert;
 
 final class GmvProvider implements GmvProviderInterface
 {
+    /** @param OrderRepositoryInterface<OrderInterface>&EntityRepository $orderRepository */
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly MoneyFormatterInterface $moneyFormatter,

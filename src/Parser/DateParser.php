@@ -17,15 +17,24 @@ final class DateParser implements DateParserInterface
 {
     public function parseStartOfMonth(string $date): \DateTime
     {
-        return \DateTime::createFromFormat('m/Y', $date)
-            ->modify('first day of this month')
-            ->setTime(0, 0, 0);
+        $dateTime = \DateTime::createFromFormat('m/Y', $date);
+
+        if ($dateTime === false) {
+            throw new \InvalidArgumentException('Invalid date format. Expected format: m/Y.');
+        }
+
+        return $dateTime->modify('first day of this month')->setTime(0, 0, 0);
     }
 
     public function parseEndOfMonth(string $date): \DateTime
     {
-        return \DateTime::createFromFormat('m/Y', $date)
-            ->modify('last day of this month')
+        $dateTime = \DateTime::createFromFormat('m/Y', $date);
+
+        if ($dateTime === false) {
+            throw new \InvalidArgumentException('Invalid date format. Expected format: m/Y.');
+        }
+
+        return $dateTime->modify('last day of this month')
             ->setTime(23, 59, 59);
     }
 

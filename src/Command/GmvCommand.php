@@ -21,6 +21,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Assert\Assert;
 
 #[AsCommand(
     name: 'sylius:gmv:calculate',
@@ -57,6 +58,9 @@ final class GmvCommand extends Command
     {
         $periodStart = $input->getArgument('periodStart');
         $periodEnd = $input->getArgument('periodEnd');
+
+        Assert::string($periodStart);
+        Assert::string($periodEnd);
 
         if (!$this->validator->validate($periodStart, $periodEnd)) {
             $output->writeln('<error>Invalid format or start date must be less than end date. Please use MM/YYYY.</error>');
