@@ -33,7 +33,6 @@ final class GmvProvider implements GmvProviderInterface
         $gmv = [];
         $currencyCodes = $this->findCurrenciesInOrders($periodStart, $periodEnd);
 
-
         foreach ($currencyCodes as $currencyCode) {
             $total = $this->calculateGmvForPeriodAndCurrency($periodStart, $periodEnd, $currencyCode);
 
@@ -46,9 +45,9 @@ final class GmvProvider implements GmvProviderInterface
     /** @return array<string> */
     private function findCurrenciesInOrders(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): array
     {
-        $queryBuilder = $this->orderRepository->createListQueryBuilder();
+        $queryBuilder = $this->orderRepository->createQueryBuilder('o');
 
-        $currencies = $queryBuilder
+        $query = $queryBuilder
             ->select('o.currencyCode')
             ->andWhere('o.checkoutCompletedAt >= :periodStart')
             ->andWhere('o.checkoutCompletedAt <= :periodEnd')
@@ -59,8 +58,9 @@ final class GmvProvider implements GmvProviderInterface
             ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
             ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
             ->groupBy('o.currencyCode')
-            ->getQuery()
-            ->getScalarResult();
+            ->getQuery();
+
+        $currencies = $query->getScalarResult();
 
         Assert::isArray($currencies);
 
@@ -69,7 +69,7 @@ final class GmvProvider implements GmvProviderInterface
 
     private function calculateGmvForPeriodAndCurrency(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, string $currencyCode): int
     {
-        $queryBuilder = $this->orderRepository->createListQueryBuilder();
+        $queryBuilder = $this->orderRepository->createQueryBuilder('o');
 
         $totalItemsQuery = $queryBuilder
             ->select('SUM(o.itemsTotal) as totalItems')
@@ -104,9 +104,6 @@ final class GmvProvider implements GmvProviderInterface
             ->setParameter('currencyCode', $currencyCode)
             ->getQuery()
             ->getSingleScalarResult();
-
-        Assert::integer($totalItemsQuery);
-        Assert::integer($totalTaxQuery);
 
         $totalItems = intval($totalItemsQuery);
         $totalTaxes = intval($totalTaxQuery);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Sylius\GmvBundle\Command;
+namespace Tests\Sylius\GmvBundle\Unit;
 
 use Sylius\GmvBundle\Command\GmvCommand;
 use Sylius\GmvBundle\Parser\DateParserInterface;
@@ -113,8 +113,8 @@ class GmvCommandTest extends TestCase
 
         $output = $this->commandTester->getDisplay();
         $this->assertStringContainsString('GMV Calculation', $output);
-        $this->assertStringContainsString('Period Start:', $output);
-        $this->assertStringContainsString('Period End:', $output);
+        $this->assertStringContainsString('Period Start: 2023-01-01', $output);
+        $this->assertStringContainsString('Period End: 2023-02-28', $output);
         $this->assertStringContainsString('GMV in USD: $2000.00', $output);
     }
 
@@ -146,5 +146,43 @@ class GmvCommandTest extends TestCase
 
         $output = $this->commandTester->getDisplay();
         $this->assertStringContainsString('Invalid format or start date must be less than end date. Please use MM/YYYY.', $output);
+    }
+
+    public function testExecuteNoSales(): void
+    {
+        $this->validator
+        ->method('validate')
+        ->willReturn(true);
+
+        $periodStart = '01/2024';
+        $periodEnd = '05/2024';
+
+        $startDate = new \DateTime('2024-01-01');
+        $endDate = new \DateTime('2024-04-30');
+
+        $this->dateParser
+            ->method('parseStartOfMonth')
+            ->with($periodStart)
+            ->willReturn($startDate);
+
+        $this->dateParser
+            ->method('parseEndOfMonth')
+            ->with($periodEnd)
+            ->willReturn($endDate);
+
+        $this->gmvProvider
+            ->method('getGmvForPeriod')
+            ->willReturn([]);
+
+        $this->commandTester->execute([
+            'periodStart' => $periodStart,
+            'periodEnd' => $periodEnd,
+        ]);
+
+        $output = $this->commandTester->getDisplay();
+        $this->assertStringContainsString('GMV Calculation', $output);
+        $this->assertStringContainsString('Period Start: 2024-01-01', $output);
+        $this->assertStringContainsString('Period End: 2024-04-30', $output);
+        $this->assertStringContainsString('No sales found for the given period', $output);
     }
 }

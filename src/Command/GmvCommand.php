@@ -71,6 +71,13 @@ final class GmvCommand extends Command
         $output->writeln('<info>GMV Calculation</info>');
         $output->writeln(sprintf('<comment>Period Start:</comment> %s', $startDate->format('Y-m-d')));
         $output->writeln(sprintf('<comment>Period End:</comment> %s', $endDate->format('Y-m-d')));
+
+        if (empty($gmvs)) {
+            $output->writeln('<comment>No sales found for the given period.</comment>');
+
+            return Command::SUCCESS;
+        }
+
         foreach ($gmvs as $key => $gmv) {
             $output->writeln(sprintf('<comment>GMV in %s:</comment> %s', $key, $gmv));
         }

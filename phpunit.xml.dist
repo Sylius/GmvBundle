@@ -17,4 +17,10 @@
       <directory>tests</directory>
     </testsuite>
   </testsuites>
+
+  <php>
+    <server name="KERNEL_CLASS" value="Tests\Sylius\GmvBundle\Application\TestKernel" />
+  </php>
 </phpunit>
+
+

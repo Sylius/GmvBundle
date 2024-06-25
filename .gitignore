@@ -1,3 +1,5 @@
 /vendor
+!/var/data/.gitkeep
+/var
 /composer.lock
 /.phpunit.cache
