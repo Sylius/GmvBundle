@@ -32,6 +32,7 @@ final class DateParser implements DateParserInterface
     public function getDefaultStartDate(): \DateTime
     {
         $now = new \DateTime();
+
         return (clone $now)
             ->modify('first day of -12 months');
     }
@@ -39,6 +40,7 @@ final class DateParser implements DateParserInterface
     public function getDefaultEndDate(): \DateTime
     {
         $now = new \DateTime();
+
         return (clone $now)
             ->modify('last day of last month');
     }

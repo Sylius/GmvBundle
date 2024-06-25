@@ -23,7 +23,7 @@ final class GmvProvider implements GmvProviderInterface
 {
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly MoneyFormatterInterface $moneyFormatter
+        private readonly MoneyFormatterInterface $moneyFormatter,
     ) {
     }
 
@@ -64,7 +64,7 @@ final class GmvProvider implements GmvProviderInterface
 
         Assert::isArray($currencies);
 
-        return array_map(fn(array $currency) => $currency['currencyCode'], $currencies);
+        return array_map(fn (array $currency) => $currency['currencyCode'], $currencies);
     }
 
     private function calculateGmvForPeriodAndCurrency(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, string $currencyCode): int
@@ -105,8 +105,8 @@ final class GmvProvider implements GmvProviderInterface
             ->getQuery()
             ->getSingleScalarResult();
 
-        $totalItems = intval($totalItemsQuery);
-        $totalTaxes = intval($totalTaxQuery);
+        $totalItems = (int) $totalItemsQuery;
+        $totalTaxes = (int) $totalTaxQuery;
 
         return $totalItems - $totalTaxes;
     }

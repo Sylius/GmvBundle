@@ -24,14 +24,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'sylius:gmv:calculate',
-    description: 'Lightweight local command to calculate the Sylius instance GMV within a specific period'
+    description: 'Lightweight local command to calculate the Sylius instance GMV within a specific period',
 )]
 final class GmvCommand extends Command
 {
     public function __construct(
         private readonly InputParametersValidatorInterface $validator,
         private readonly DateParserInterface $dateParser,
-        private readonly GmvProviderInterface $gmvProvider
+        private readonly GmvProviderInterface $gmvProvider,
     ) {
         parent::__construct();
     }
@@ -41,15 +41,15 @@ final class GmvCommand extends Command
         $this
             ->addArgument(
                 'periodStart',
-                InputArgument::OPTIONAL, '
-                The start of the period (e.g., 05/2024)',
-                $this->dateParser->getDefaultStartDate()->format('m/Y')
+                InputArgument::OPTIONAL,
+                'The start of the period (e.g., 05/2024)',
+                $this->dateParser->getDefaultStartDate()->format('m/Y'),
             )
             ->addArgument(
                 'periodEnd',
                 InputArgument::OPTIONAL,
                 'The end of the period (e.g., 06/2024)',
-                $this->dateParser->getDefaultEndDate()->format('m/Y')
+                $this->dateParser->getDefaultEndDate()->format('m/Y'),
             );
     }
 
@@ -60,6 +60,7 @@ final class GmvCommand extends Command
 
         if (!$this->validator->validate($periodStart, $periodEnd)) {
             $output->writeln('<error>Invalid format or start date must be less than end date. Please use MM/YYYY.</error>');
+
             return Command::FAILURE;
         }
 

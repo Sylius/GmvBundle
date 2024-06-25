@@ -1,20 +1,34 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace Tests\Sylius\GmvBundle\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Sylius\GmvBundle\Command\GmvCommand;
 use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Sylius\GmvBundle\Validator\InputParametersValidatorInterface;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GmvCommandTest extends TestCase
 {
     private InputParametersValidatorInterface $validator;
+
     private DateParserInterface $dateParser;
+
     private GmvProviderInterface $gmvProvider;
+
     private CommandTester $commandTester;
 
     protected function setUp(): void

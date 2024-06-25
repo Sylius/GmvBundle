@@ -1,10 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 namespace Tests\Sylius\GmvBundle\Functional;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use Fidry\AliceDataFixtures\Persistence\PurgeMode;
 use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -12,7 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class GmvProviderTest extends KernelTestCase
 {
     private GmvProviderInterface $gmvProvider;
+
     private EntityManagerInterface $entityManager;
+
     private DateParserInterface $dateParser;
 
     protected function setUp(): void
@@ -36,10 +48,9 @@ class GmvProviderTest extends KernelTestCase
 
         $this->assertEquals(
             [],
-            $gmv
+            $gmv,
         );
     }
-
 
     public function testGmvNoShippingNoTaxes(): void
     {
@@ -52,7 +63,7 @@ class GmvProviderTest extends KernelTestCase
 
         $this->assertEquals(
             ['USD' => '$1,377.00', 'EUR' => '€2,055.48'],
-            $gmv
+            $gmv,
         );
     }
 
@@ -67,7 +78,7 @@ class GmvProviderTest extends KernelTestCase
 
         $this->assertEquals(
             ['USD' => '$7,264.00', 'EUR' => '€20,443.12'],
-            $gmv
+            $gmv,
         );
     }
 
@@ -84,6 +95,6 @@ class GmvProviderTest extends KernelTestCase
         $container = static::getContainer();
 
         $loader = $container->get('fidry_alice_data_fixtures.loader.doctrine');
-        $loader->load([__DIR__ . '/../DataFixtures/'. $filename], [], []);
+        $loader->load([__DIR__ . '/../DataFixtures/' . $filename], [], []);
     }
 }
