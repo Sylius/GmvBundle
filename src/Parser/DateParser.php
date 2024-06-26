@@ -23,7 +23,7 @@ final class DateParser implements DateParserInterface
             throw new \InvalidArgumentException('Invalid date format. Expected format: m/Y.');
         }
 
-        return $dateTime->modify('first day of this month')->setTime(0, 0, 0);
+        return $dateTime->modify('first day of this month 00:00:00');
     }
 
     public function parseEndOfMonth(string $date): \DateTime
@@ -34,15 +34,14 @@ final class DateParser implements DateParserInterface
             throw new \InvalidArgumentException('Invalid date format. Expected format: m/Y.');
         }
 
-        return $dateTime->modify('last day of this month')
-            ->setTime(23, 59, 59);
+        return $dateTime->modify('last day of this month 23:59:59');
     }
 
     public function getDefaultStartDate(): \DateTime
     {
         $now = new \DateTime();
 
-        return (clone $now)
+        return $now
             ->modify('first day of -12 months');
     }
 
@@ -50,7 +49,7 @@ final class DateParser implements DateParserInterface
     {
         $now = new \DateTime();
 
-        return (clone $now)
+        return $now
             ->modify('last day of last month');
     }
 }

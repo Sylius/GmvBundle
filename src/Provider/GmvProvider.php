@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\GmvBundle\Provider;
 
+use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\MoneyBundle\Formatter\MoneyFormatterInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Core\Model\AdjustmentInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
@@ -48,22 +50,11 @@ final class GmvProvider implements GmvProviderInterface
     /** @return array<string> */
     private function findCurrenciesInOrders(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): array
     {
-        $queryBuilder = $this->orderRepository->createQueryBuilder('o');
+        $queryBuilder = $this->createCommonQueryBuilder($periodStart, $periodEnd);
+        $queryBuilder->select('o.currencyCode')
+            ->groupBy('o.currencyCode');
 
-        $query = $queryBuilder
-            ->select('o.currencyCode')
-            ->andWhere('o.checkoutCompletedAt >= :periodStart')
-            ->andWhere('o.checkoutCompletedAt <= :periodEnd')
-            ->andWhere('o.checkoutState = :completedState')
-            ->andWhere('o.paymentState != :cancelledState')
-            ->setParameter('periodStart', $periodStart)
-            ->setParameter('periodEnd', $periodEnd)
-            ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
-            ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
-            ->groupBy('o.currencyCode')
-            ->getQuery();
-
-        $currencies = $query->getScalarResult();
+        $currencies = $queryBuilder->getQuery()->getScalarResult();
 
         Assert::isArray($currencies);
 
@@ -72,45 +63,39 @@ final class GmvProvider implements GmvProviderInterface
 
     private function calculateGmvForPeriodAndCurrency(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, string $currencyCode): int
     {
-        $queryBuilder = $this->orderRepository->createQueryBuilder('o');
+        $queryBuilder = $this->createCommonQueryBuilder($periodStart, $periodEnd);
+        $queryBuilder->andWhere('o.currencyCode = :currencyCode')
+            ->setParameter('currencyCode', $currencyCode);
 
-        $totalItemsQuery = $queryBuilder
+        $totalItemsQuery = (int) $queryBuilder
             ->select('SUM(o.itemsTotal) as totalItems')
-            ->andWhere('o.checkoutCompletedAt >= :periodStart')
-            ->andWhere('o.checkoutCompletedAt <= :periodEnd')
-            ->andWhere('o.checkoutState = :completedState')
-            ->andWhere('o.paymentState != :cancelledState')
-            ->andWhere('o.currencyCode = :currencyCode')
-            ->setParameter('periodStart', $periodStart)
-            ->setParameter('periodEnd', $periodEnd)
-            ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
-            ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
-            ->setParameter('currencyCode', $currencyCode)
             ->getQuery()
             ->getSingleScalarResult();
 
-        $totalTaxQuery = $queryBuilder
+        $totalTaxQuery = (int) $queryBuilder
             ->select('SUM(adjustment.amount) as totalTaxes')
             ->leftJoin('o.items', 'items')
             ->leftJoin('items.units', 'units')
             ->leftJoin('units.adjustments', 'adjustment', 'WITH', 'adjustment.type = :taxType AND adjustment.neutral = true')
+            ->setParameter('taxType', AdjustmentInterface::TAX_ADJUSTMENT)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $totalItemsQuery - $totalTaxQuery;
+    }
+
+    private function createCommonQueryBuilder(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): QueryBuilder
+    {
+        $queryBuilder = $this->orderRepository->createQueryBuilder('o');
+
+        return $queryBuilder
             ->andWhere('o.checkoutCompletedAt >= :periodStart')
             ->andWhere('o.checkoutCompletedAt <= :periodEnd')
             ->andWhere('o.checkoutState = :completedState')
             ->andWhere('o.paymentState != :cancelledState')
-            ->andWhere('o.currencyCode = :currencyCode')
             ->setParameter('periodStart', $periodStart)
             ->setParameter('periodEnd', $periodEnd)
             ->setParameter('completedState', OrderCheckoutStates::STATE_COMPLETED)
-            ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED)
-            ->setParameter('taxType', 'tax')
-            ->setParameter('currencyCode', $currencyCode)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        $totalItems = (int) $totalItemsQuery;
-        $totalTaxes = (int) $totalTaxQuery;
-
-        return $totalItems - $totalTaxes;
+            ->setParameter('cancelledState', OrderPaymentStates::STATE_CANCELLED);
     }
 }

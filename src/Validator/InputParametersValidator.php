@@ -21,16 +21,6 @@ final class InputParametersValidator implements InputParametersValidatorInterfac
     {
     }
 
-    public function validateDateFormat(string $date): bool
-    {
-        return preg_match('/^(0[1-9]|1[0-2])\/\d{4}$/', $date) === 1;
-    }
-
-    public function validateDates(\DateTime $startDate, \DateTime $endDate): bool
-    {
-        return $startDate < $endDate;
-    }
-
     public function validate(string $periodStart, string $periodEnd): bool
     {
         if (!$this->validateDateFormat($periodStart) || !$this->validateDateFormat($periodEnd)) {
@@ -41,5 +31,15 @@ final class InputParametersValidator implements InputParametersValidatorInterfac
         $endDate = $this->dateParser->parseEndOfMonth($periodEnd);
 
         return $this->validateDates($startDate, $endDate);
+    }
+
+    private function validateDateFormat(string $date): bool
+    {
+        return preg_match('/^(0[1-9]|1[0-2])\/\d{4}$/', $date) === 1;
+    }
+
+    private function validateDates(\DateTime $startDate, \DateTime $endDate): bool
+    {
+        return $startDate < $endDate;
     }
 }

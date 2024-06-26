@@ -15,7 +15,6 @@ namespace Tests\Sylius\GmvBundle\Functional;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -25,15 +24,12 @@ class GmvProviderTest extends KernelTestCase
 
     private EntityManagerInterface $entityManager;
 
-    private DateParserInterface $dateParser;
-
     protected function setUp(): void
     {
         self::bootKernel(['environment' => 'test']);
 
         $container = static::getContainer();
         $this->entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->dateParser = $container->get('sylius_gmv.parser.date');
         $this->gmvProvider = $container->get('sylius_gmv.provider.gmv');
 
         $this->createDatabaseSchema();
@@ -46,10 +42,7 @@ class GmvProviderTest extends KernelTestCase
 
         $gmv = $this->gmvProvider->getGmvForPeriod($periodStart, $periodEnd);
 
-        $this->assertEquals(
-            [],
-            $gmv,
-        );
+        $this->assertEmpty($gmv);
     }
 
     public function testGmvNoShippingNoTaxes(): void

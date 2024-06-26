@@ -11,7 +11,7 @@
 
 -->
 
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.2/phpunit.xsd" colors="true" cacheDirectory=".phpunit.cache">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" colors="true" cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="all">
       <directory>tests</directory>
@@ -22,5 +22,3 @@
     <server name="KERNEL_CLASS" value="Tests\Sylius\GmvBundle\Application\TestKernel" />
   </php>
 </phpunit>
-
-

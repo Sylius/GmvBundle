@@ -83,8 +83,8 @@ final class GmvCommand extends Command
             return Command::SUCCESS;
         }
 
-        foreach ($gmvs as $key => $gmv) {
-            $output->writeln(sprintf('<comment>GMV in %s:</comment> %s', $key, $gmv));
+        foreach ($gmvs as $currencyCode => $gmv) {
+            $output->writeln(sprintf('<comment>GMV in %s:</comment> %s', $currencyCode, $gmv));
         }
 
         return Command::SUCCESS;
