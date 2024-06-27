@@ -67,12 +67,12 @@ final class GmvProvider implements GmvProviderInterface
         $queryBuilder->andWhere('o.currencyCode = :currencyCode')
             ->setParameter('currencyCode', $currencyCode);
 
-        $totalItemsQuery = (int) $queryBuilder
+        $totalItems = (int) $queryBuilder
             ->select('SUM(o.itemsTotal) as totalItems')
             ->getQuery()
             ->getSingleScalarResult();
 
-        $totalTaxQuery = (int) $queryBuilder
+        $totalTax = (int) $queryBuilder
             ->select('SUM(adjustment.amount) as totalTaxes')
             ->leftJoin('o.items', 'items')
             ->leftJoin('items.units', 'units')
@@ -81,7 +81,7 @@ final class GmvProvider implements GmvProviderInterface
             ->getQuery()
             ->getSingleScalarResult();
 
-        return $totalItemsQuery - $totalTaxQuery;
+        return $totalItems - $totalTax;
     }
 
     private function createCommonQueryBuilder(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd): QueryBuilder

@@ -22,4 +22,4 @@ framework:
 doctrine:
     dbal:
         driver: pdo_sqlite
-        path: '%kernel.project_dir%/var/data/test.sqlite'
+        path: '%kernel.project_dir%/var/test.sqlite'

@@ -1,7 +1,4 @@
 /vendor
-/var/cache/
-/var/logs/
-/var/data/*.sqlite
-!/var/data/.gitkeep
+/var
 /composer.lock
 /.phpunit.cache
