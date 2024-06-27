@@ -19,15 +19,13 @@ final class DefaultDateProvider implements DefaultDateProviderInterface
     {
         $now = new \DateTime();
 
-        return $now
-            ->modify('first day of -12 months');
+        return $now->modify('first day of -12 months');
     }
 
     public function getDefaultEndDate(): \DateTime
     {
         $now = new \DateTime();
 
-        return $now
-            ->modify('last day of last month');
+        return $now->modify('last day of last month');
     }
 }

@@ -310,7 +310,6 @@ Sylius\Component\Core\Model\Adjustment:
         amount: 34500
         neutral: false
 
-
 Sylius\Component\Core\Model\Channel:
     channel:
         code: "CHANNEL"

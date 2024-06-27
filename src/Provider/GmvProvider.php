@@ -64,7 +64,8 @@ final class GmvProvider implements GmvProviderInterface
     private function calculateGmvForPeriodAndCurrency(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, string $currencyCode): int
     {
         $queryBuilder = $this->createCommonQueryBuilder($periodStart, $periodEnd);
-        $queryBuilder->andWhere('o.currencyCode = :currencyCode')
+        $queryBuilder
+            ->andWhere('o.currencyCode = :currencyCode')
             ->setParameter('currencyCode', $currencyCode);
 
         $totalItems = (int) $queryBuilder
