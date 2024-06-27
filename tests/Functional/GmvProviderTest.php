@@ -70,7 +70,7 @@ class GmvProviderTest extends KernelTestCase
         $gmv = $this->gmvProvider->getGmvForPeriod($periodStart, $periodEnd);
 
         $this->assertEquals(
-            ['USD' => '$7,264.00', 'EUR' => '€20,443.12'],
+            ['USD' => '$8,494.00', 'EUR' => '€20,666.48'],
             $gmv,
         );
     }

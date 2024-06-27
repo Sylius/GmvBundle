@@ -263,12 +263,12 @@ Sylius\Component\Core\Model\Adjustment:
         type: tax
         label: "Tax"
         amount: 61500
-        neutral: true
+        neutral: false
     expensive_sw_mug_item_1_tax:
         type: tax
         label: "Tax"
         amount: 11168
-        neutral: true
+        neutral: false
     order_001_shipping:
         type: shipping
         label: "Shipping"
