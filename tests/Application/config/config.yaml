@@ -1,0 +1,25 @@
+imports:
+    - { resource: '@SyliusCoreBundle/Resources/config/app/config.yml' }
+    - { resource: '@SyliusGmvBundle/config/services.xml' }
+
+parameters:
+    locale: en_US
+
+security:
+    firewalls:
+        main:
+            security: false
+
+framework:
+    test: true
+    session:
+        handler_id: null
+    csrf_protection: ~
+    router:
+        resource: ~
+    secret: 'test'
+
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        path: '%kernel.project_dir%/var/test.sqlite'
