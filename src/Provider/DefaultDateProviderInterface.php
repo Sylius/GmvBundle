@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GmvBundle\Parser;
+namespace Sylius\GmvBundle\Provider;
 
-interface DateParserInterface
+interface DefaultDateProviderInterface
 {
-    public function parseStartOfMonth(string $date): \DateTime;
+    public function getDefaultStartDate(): \DateTime;
 
-    public function parseEndOfMonth(string $date): \DateTime;
+    public function getDefaultEndDate(): \DateTime;
 }

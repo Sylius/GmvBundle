@@ -36,20 +36,4 @@ final class DateParser implements DateParserInterface
 
         return $dateTime->modify('last day of this month 23:59:59');
     }
-
-    public function getDefaultStartDate(): \DateTime
-    {
-        $now = new \DateTime();
-
-        return $now
-            ->modify('first day of -12 months');
-    }
-
-    public function getDefaultEndDate(): \DateTime
-    {
-        $now = new \DateTime();
-
-        return $now
-            ->modify('last day of last month');
-    }
 }

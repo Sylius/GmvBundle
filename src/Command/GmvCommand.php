@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\GmvBundle\Command;
 
 use Sylius\GmvBundle\Parser\DateParserInterface;
+use Sylius\GmvBundle\Provider\DefaultDateProviderInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Sylius\GmvBundle\Validator\InputParametersValidatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -33,6 +34,7 @@ final class GmvCommand extends Command
         private readonly InputParametersValidatorInterface $validator,
         private readonly DateParserInterface $dateParser,
         private readonly GmvProviderInterface $gmvProvider,
+        private readonly DefaultDateProviderInterface $defaultDateProvider,
     ) {
         parent::__construct();
     }
@@ -44,13 +46,13 @@ final class GmvCommand extends Command
                 'periodStart',
                 InputArgument::OPTIONAL,
                 'The start of the period (e.g., 05/2024)',
-                $this->dateParser->getDefaultStartDate()->format('m/Y'),
+                $this->defaultDateProvider->getDefaultStartDate()->format('m/Y'),
             )
             ->addArgument(
                 'periodEnd',
                 InputArgument::OPTIONAL,
                 'The end of the period (e.g., 06/2024)',
-                $this->dateParser->getDefaultEndDate()->format('m/Y'),
+                $this->defaultDateProvider->getDefaultEndDate()->format('m/Y'),
             );
     }
 

@@ -16,6 +16,7 @@ namespace Tests\Sylius\GmvBundle\Unit;
 use PHPUnit\Framework\TestCase;
 use Sylius\GmvBundle\Command\GmvCommand;
 use Sylius\GmvBundle\Parser\DateParserInterface;
+use Sylius\GmvBundle\Provider\DefaultDateProviderInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Sylius\GmvBundle\Validator\InputParametersValidatorInterface;
 use Symfony\Component\Console\Application;
@@ -31,13 +32,16 @@ class GmvCommandTest extends TestCase
 
     private CommandTester $commandTester;
 
+    private DefaultDateProviderInterface $defaultDateProvider;
+
     protected function setUp(): void
     {
         $this->validator = $this->createMock(InputParametersValidatorInterface::class);
         $this->dateParser = $this->createMock(DateParserInterface::class);
         $this->gmvProvider = $this->createMock(GmvProviderInterface::class);
+        $this->defaultDateProvider = $this->createMock(DefaultDateProviderInterface::class);
 
-        $command = new GmvCommand($this->validator, $this->dateParser, $this->gmvProvider);
+        $command = new GmvCommand($this->validator, $this->dateParser, $this->gmvProvider, $this->defaultDateProvider);
 
         $application = new Application();
         $application->add($command);
@@ -51,11 +55,11 @@ class GmvCommandTest extends TestCase
         $defaultStartDate = new \DateTime('first day of last month');
         $defaultEndDate = new \DateTime('last day of last month');
 
-        $this->dateParser
+        $this->defaultDateProvider
             ->method('getDefaultStartDate')
             ->willReturn($defaultStartDate);
 
-        $this->dateParser
+        $this->defaultDateProvider
             ->method('getDefaultEndDate')
             ->willReturn($defaultEndDate);
 
