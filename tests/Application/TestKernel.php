@@ -74,7 +74,6 @@ final class TestKernel extends Kernel
             new TwigBundle(),
             new DoctrineBundle(),
             new FlysystemBundle(),
-            new SyliusCalendarBundle(),
             new SyliusStateMachineAbstractionBundle(),
             new SyliusOrderBundle(),
             new SyliusAddressingBundle(),
@@ -118,6 +117,10 @@ final class TestKernel extends Kernel
             new NelmioAliceBundle(),
             new FidryAliceDataFixturesBundle(),
         ];
+
+        if (SyliusCoreBundle::VERSION_ID < '20000') {
+            $bundles[] = new SyliusCalendarBundle();
+        }
 
         return $bundles;
     }
