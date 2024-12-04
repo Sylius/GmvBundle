@@ -61,6 +61,7 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
@@ -100,26 +101,30 @@ final class TestKernel extends Kernel
             new SyliusCoreBundle(),
             new SyliusResourceBundle(),
             new SyliusGridBundle(),
-            new BazingaHateoasBundle(),
-            new JMSSerializerBundle(),
             new KnpGaufretteBundle(),
-            new FOSRestBundle(),
             new LiipImagineBundle(),
             new BabDevPagerfantaBundle(),
             new WebpackEncoreBundle(),
-            new winzouStateMachineBundle(),
             new DoctrineMigrationsBundle(),
-            new SonataBlockBundle(),
             new SyliusLabsDoctrineMigrationsExtraBundle(),
-            new PayumBundle(),
             new StofDoctrineExtensionsBundle(),
-            new SyliusPayumBundle(),
             new NelmioAliceBundle(),
             new FidryAliceDataFixturesBundle(),
         ];
 
         if (SyliusCoreBundle::VERSION_ID < '20000') {
             $bundles[] = new SyliusCalendarBundle();
+            $bundles[] = new BazingaHateoasBundle();
+            $bundles[] = new JMSSerializerBundle();
+            $bundles[] = new FOSRestBundle();
+            $bundles[] = new winzouStateMachineBundle();
+            $bundles[] = new SonataBlockBundle();
+            $bundles[] = new PayumBundle();
+            $bundles[] = new SyliusPayumBundle();
+        }
+
+        if (SyliusCoreBundle::VERSION_ID >= '20000') {
+            $bundles[] = new TwigComponentBundle();
         }
 
         return $bundles;
