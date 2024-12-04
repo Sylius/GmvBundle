@@ -2,6 +2,8 @@
 
 1. Support for Sylius 2.0 has been added.
 
+1. Support for Sylius 1.12 has been dropped.
+
 1. The `GmvCommand` console command has been moved from `Command` to `Console\Command` and changed its namespace
    accordingly from `Sylius\GmvBundle\Command\GmvCommand` to `Sylius\GmvBundle\Console\Command\GmvCommand`.
 
