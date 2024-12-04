@@ -23,3 +23,6 @@ doctrine:
     dbal:
         driver: pdo_sqlite
         path: '%kernel.project_dir%/var/test.sqlite'
+
+webpack_encore:
+    output_path: '%kernel.project_dir%/public/build/default'
