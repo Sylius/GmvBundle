@@ -1,3 +1,10 @@
+# UPGRADE FROM 0.2 TO 1.0
+
+1. Support for Sylius 2.0 has been added.
+
+1. The `GmvCommand` console command has been moved from `Command` to `Console\Command` and changed its namespace
+   accordingly from `Sylius\GmvBundle\Command\GmvCommand` to `Sylius\GmvBundle\Console\Command\GmvCommand`.
+
 # UPGRADE FROM 0.1 TO 0.2
 
 1. Support for Sylius 1.14 has been added, it is now the recommended Sylius version to use with GmvPlugin.

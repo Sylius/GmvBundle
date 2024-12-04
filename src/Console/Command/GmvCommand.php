@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GmvBundle\Command;
+namespace Sylius\GmvBundle\Console\Command;
 
 use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\DefaultDateProviderInterface;

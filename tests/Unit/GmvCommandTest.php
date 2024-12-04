@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Tests\Sylius\GmvBundle\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Sylius\GmvBundle\Command\GmvCommand;
+use Sylius\GmvBundle\Console\Command\GmvCommand;
 use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\DefaultDateProviderInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
