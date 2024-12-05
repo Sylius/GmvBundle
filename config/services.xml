@@ -34,7 +34,7 @@
         <service id="sylius_gmv.provider.default_date" class="Sylius\GmvBundle\Provider\DefaultDateProvider" lazy="Sylius\GmvBundle\Provider\DefaultDateProviderInterface" />
         <service id="Sylius\GmvBundle\Provider\DefaultDateProviderInterface" alias="sylius_gmv.provider.default_date" />
 
-        <service id="sylius_gmv.command.gmv" class="Sylius\GmvBundle\Console\Command\GmvCommand">
+        <service id="sylius_gmv.console.command.gmv" class="Sylius\GmvBundle\Console\Command\GmvCommand">
             <argument type="service" id="sylius_gmv.validator.input_parameters" />
             <argument type="service" id="sylius_gmv.parser.date" />
             <argument type="service" id="sylius_gmv.provider.gmv" />

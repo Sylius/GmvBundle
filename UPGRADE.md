@@ -5,7 +5,8 @@
 1. Support for Sylius 1.12 and 1.13 have been dropped.
 
 1. The `GmvCommand` console command has been moved from `Command` to `Console\Command` and changed its namespace
-   accordingly from `Sylius\GmvBundle\Command\GmvCommand` to `Sylius\GmvBundle\Console\Command\GmvCommand`.
+   accordingly from `Sylius\GmvBundle\Command\GmvCommand` to `Sylius\GmvBundle\Console\Command\GmvCommand`. 
+   The service ID has been also changed from `sylius_gmv.command.gmv` to `sylius_gmv.console.command.gmv`. 
 
 # UPGRADE FROM 0.1 TO 0.2
 
