@@ -1,4 +1,4 @@
-### UPGRADE FROM 0.1 TO 0.2
+# UPGRADE FROM 0.1 TO 0.2
 
 1. Support for Sylius 1.14 has been added, it is now the recommended Sylius version to use with GmvPlugin.
 
