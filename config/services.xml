@@ -11,9 +11,10 @@
 
 -->
 
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd"
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <services>
         <service id="sylius_gmv.parser.date" class="Sylius\GmvBundle\Parser\DateParser" lazy="Sylius\GmvBundle\Parser\DateParserInterface"/>
@@ -26,19 +27,19 @@
 
         <service id="sylius_gmv.provider.gmv" class="Sylius\GmvBundle\Provider\GmvProvider" lazy="Sylius\GmvBundle\Provider\GmvProviderInterface">
             <argument type="service" id="sylius.repository.order" />
-            <argument type="service" id="sylius.money_formatter" />
+            <argument type="service" id="sylius.formatter.money" />
         </service>
         <service id="Sylius\GmvBundle\Provider\GmvProviderInterface" alias="sylius_gmv.provider.gmv" />
 
         <service id="sylius_gmv.provider.default_date" class="Sylius\GmvBundle\Provider\DefaultDateProvider" lazy="Sylius\GmvBundle\Provider\DefaultDateProviderInterface" />
         <service id="Sylius\GmvBundle\Provider\DefaultDateProviderInterface" alias="sylius_gmv.provider.default_date" />
 
-        <service id="sylius_gmv.command.gmv" class="Sylius\GmvBundle\Command\GmvCommand">
+        <service id="sylius_gmv.console.command.gmv" class="Sylius\GmvBundle\Console\Command\GmvCommand">
             <argument type="service" id="sylius_gmv.validator.input_parameters" />
             <argument type="service" id="sylius_gmv.parser.date" />
             <argument type="service" id="sylius_gmv.provider.gmv" />
             <argument type="service" id="sylius_gmv.provider.default_date" />
-            <tag name="console.command" command="sylius:gmv:calculate" />
+            <tag name="console.command" />
         </service>
     </services>
 
