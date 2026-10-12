@@ -19,7 +19,6 @@ use Sylius\GmvBundle\Parser\DateParserInterface;
 use Sylius\GmvBundle\Provider\DefaultDateProviderInterface;
 use Sylius\GmvBundle\Provider\GmvProviderInterface;
 use Sylius\GmvBundle\Validator\InputParametersValidatorInterface;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GmvCommandTest extends TestCase
@@ -43,10 +42,6 @@ class GmvCommandTest extends TestCase
 
         $command = new GmvCommand($this->validator, $this->dateParser, $this->gmvProvider, $this->defaultDateProvider);
 
-        $application = new Application();
-        $application->add($command);
-
-        $command = $application->find('sylius:gmv:calculate');
         $this->commandTester = new CommandTester($command);
     }
 

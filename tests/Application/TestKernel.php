@@ -14,18 +14,13 @@ declare(strict_types=1);
 namespace Tests\Sylius\GmvBundle\Application;
 
 use BabDev\PagerfantaBundle\BabDevPagerfantaBundle;
-use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle;
-use FOS\RestBundle\FOSRestBundle;
-use JMS\SerializerBundle\JMSSerializerBundle;
 use Knp\Bundle\GaufretteBundle\KnpGaufretteBundle;
 use League\FlysystemBundle\FlysystemBundle;
 use Liip\ImagineBundle\LiipImagineBundle;
 use Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle;
-use Payum\Bundle\PayumBundle\PayumBundle;
-use Sonata\BlockBundle\SonataBlockBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Sylius\Abstraction\StateMachine\SyliusStateMachineAbstractionBundle;
 use Sylius\Bundle\AddressingBundle\SyliusAddressingBundle;
@@ -42,7 +37,6 @@ use Sylius\Bundle\MailerBundle\SyliusMailerBundle;
 use Sylius\Bundle\MoneyBundle\SyliusMoneyBundle;
 use Sylius\Bundle\OrderBundle\SyliusOrderBundle;
 use Sylius\Bundle\PaymentBundle\SyliusPaymentBundle;
-use Sylius\Bundle\PayumBundle\SyliusPayumBundle;
 use Sylius\Bundle\ProductBundle\SyliusProductBundle;
 use Sylius\Bundle\PromotionBundle\SyliusPromotionBundle;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
@@ -53,7 +47,6 @@ use Sylius\Bundle\TaxonomyBundle\SyliusTaxonomyBundle;
 use Sylius\Bundle\ThemeBundle\SyliusThemeBundle;
 use Sylius\Bundle\UiBundle\SyliusUiBundle;
 use Sylius\Bundle\UserBundle\SyliusUserBundle;
-use Sylius\Calendar\SyliusCalendarBundle;
 use Sylius\GmvBundle\SyliusGmvBundle;
 use SyliusLabs\DoctrineMigrationsExtraBundle\SyliusLabsDoctrineMigrationsExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -63,7 +56,6 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\UX\TwigComponent\TwigComponentBundle;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
-use winzou\Bundle\StateMachineBundle\winzouStateMachineBundle;
 
 final class TestKernel extends Kernel
 {
@@ -101,7 +93,6 @@ final class TestKernel extends Kernel
             new SyliusCoreBundle(),
             new SyliusResourceBundle(),
             new SyliusGridBundle(),
-            new KnpGaufretteBundle(),
             new LiipImagineBundle(),
             new BabDevPagerfantaBundle(),
             new WebpackEncoreBundle(),
@@ -110,21 +101,11 @@ final class TestKernel extends Kernel
             new StofDoctrineExtensionsBundle(),
             new NelmioAliceBundle(),
             new FidryAliceDataFixturesBundle(),
+            new TwigComponentBundle(),
         ];
 
-        if (SyliusCoreBundle::VERSION_ID < '20000') {
-            $bundles[] = new SyliusCalendarBundle();
-            $bundles[] = new BazingaHateoasBundle();
-            $bundles[] = new JMSSerializerBundle();
-            $bundles[] = new FOSRestBundle();
-            $bundles[] = new winzouStateMachineBundle();
-            $bundles[] = new SonataBlockBundle();
-            $bundles[] = new PayumBundle();
-            $bundles[] = new SyliusPayumBundle();
-        }
-
-        if (SyliusCoreBundle::VERSION_ID >= '20000') {
-            $bundles[] = new TwigComponentBundle();
+        if (class_exists(KnpGaufretteBundle::class)) {
+            $bundles[] = new KnpGaufretteBundle();
         }
 
         return $bundles;

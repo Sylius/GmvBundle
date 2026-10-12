@@ -1,6 +1,6 @@
 imports:
     - { resource: '@SyliusCoreBundle/Resources/config/app/config.yml' }
-    - { resource: '@SyliusGmvBundle/config/services.xml' }
+    - { resource: '@SyliusGmvBundle/config/services.php' }
 
 parameters:
     locale: en_US
@@ -26,3 +26,7 @@ doctrine:
 
 webpack_encore:
     output_path: '%kernel.project_dir%/public/build/default'
+
+twig_component:
+    anonymous_template_directory: 'components/'
+    defaults: []

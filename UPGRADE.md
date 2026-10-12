@@ -1,3 +1,13 @@
+# UPGRADE FROM 1.0 TO 1.1
+
+1. Support for Symfony 8 has been added. It requires Sylius 2.3, the first Sylius release supporting Symfony 8.
+
+1. Support for Symfony 5.4, PHP 8.1 and Sylius 1.14 has been dropped. The minimum requirements are now PHP 8.2
+   and Sylius 2.0.
+
+1. The `config/services.xml` file has been replaced with `config/services.php`. If you imported it directly
+   (instead of relying on `SyliusGmvExtension`), update the path accordingly.
+
 # UPGRADE FROM 0.2 TO 1.0
 
 1. Support for Sylius 2.0 has been added.

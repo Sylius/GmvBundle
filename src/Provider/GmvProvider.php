@@ -21,7 +21,6 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
-use Webmozart\Assert\Assert;
 
 final class GmvProvider implements GmvProviderInterface
 {
@@ -55,8 +54,6 @@ final class GmvProvider implements GmvProviderInterface
             ->groupBy('o.currencyCode');
 
         $currencies = $queryBuilder->getQuery()->getScalarResult();
-
-        Assert::isArray($currencies);
 
         return array_map(fn (array $currency) => $currency['currencyCode'], $currencies);
     }
