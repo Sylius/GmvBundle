@@ -26,3 +26,7 @@ doctrine:
 
 webpack_encore:
     output_path: '%kernel.project_dir%/public/build/default'
+
+twig_component:
+    anonymous_template_directory: 'components/'
+    defaults: []
